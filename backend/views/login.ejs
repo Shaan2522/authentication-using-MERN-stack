@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form method="POST" action="/login">
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <div><img src="/captcha" alt="CAPTCHA" /></div>
+      <input type="text" name="captcha" placeholder="Enter CAPTCHA" required />
+      <button type="submit">Login</button>
+    </form>
+    <a href="/auth/google">Login with Google</a>
+    <a href="/auth/github">Login with GitHub</a>
+    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+  </div>
+</body>
+</html>
