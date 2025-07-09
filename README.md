@@ -4,26 +4,40 @@ This project contains a Node.js/Express/MongoDB backend and a React (Vite) front
 
 ## 📁 Folder Structure
 ```
-├── client/ # React frontend
-│ ├── public/ # React public assets
-│ └── src/ # React source code
-│ ├── components/ # Reusable components (forms, navbar, etc.)
-│ ├── pages/ # Login, Signup, Home pages
-│ ├── App.js # Main app component
-│ ├── index.js # React DOM renderer
-│ └── styles/ # CSS modules or global styles
-├── models/ # Mongoose schemas and auth logic
-│ ├── auth.js # Signup/login logic with bcrypt
-│ └── user.js # User schema (email, password, OAuth fields)
-├── routes/ # Express route handlers
-│ └── authRoutes.js # Handles login, signup, logout, home, captcha, etc.
-├── src/ # Express app entry point and server logic
-│ ├── index.js # Main Express server setup
-│ └── passportConfig.js # Passport.js strategy setup for Google & GitHub
-├── .env # Environment variables (API keys, secrets, etc.)
-├── package.json # Server dependencies and scripts
-├── client/package.json # React app dependencies and scripts
-└── package-lock.json # Server install lockfile
+├── backend/ # Backend logic (Express.js server)
+│ ├── models/ # Mongoose schemas and auth logic
+│ │ ├── auth.js # Signup/login logic with bcrypt
+│ │ └── user.js # User schema (email, password, OAuth fields)
+│ ├── public/ # Static CSS and assets
+│ │ └── style.css # Shared global styles
+│ ├── routes/ # Express route handlers
+│ │ └── authRoutes.js # Login, signup, logout, captcha endpoints
+│ ├── src/ # Server logic and Passport strategies
+│ │ ├── index.js # Express app setup
+│ │ └── passportConfig.js # Passport.js (Google, GitHub, Local)
+│ ├── views/ # Legacy EJS templates (optional/legacy)
+│ │ ├── home.ejs
+│ │ ├── login.ejs
+│ │ └── signup.ejs
+│ └── .env # Environment variables
+│
+├── frontend/ # React frontend using Vite
+│ ├── src/
+│ │ ├── pages/ # Main auth and dashboard pages
+│ │ │ ├── AuthForm.css # Shared styles for forms
+│ │ │ ├── AuthForm.custom.css
+│ │ │ ├── Home.jsx # Protected home/dashboard page
+│ │ │ ├── Login.jsx # Login form (with CAPTCHA + OAuth)
+│ │ │ └── Signup.jsx # Signup form (password validation)
+│ │ ├── App.css # Global app styles
+│ │ ├── App.jsx # Main React app component
+│ │ ├── index.css # Root styles
+│ │ └── main.jsx # Vite entry point
+│ ├── index.html # HTML template for Vite
+│ ├── vite.config.js # Vite config file
+│ └── eslint.config.js # ESLint configuration
+├── .env # Frontend environment variables
+└──  README.md 
 ```
 
 ---
