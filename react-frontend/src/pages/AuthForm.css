@@ -1,7 +1,7 @@
 /* AuthForm.css - Modern, clean form styling */
 .auth-form-container {
   max-width: 500px;
-  margin: 40px auto;
+  /* margin: 40px auto; */
   background: #ffffff;
   padding: 2rem;
   border-radius: 12px;

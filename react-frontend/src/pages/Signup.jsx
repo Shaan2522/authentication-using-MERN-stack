@@ -1,17 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import './AuthForm.css';
+const GoogleIcon = () => (
+  <img
+    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+    alt="Google"
+    width="20"
+    height="20"
+    style={{ marginRight: '10px' }}
+  />
+);
 
-const getStrength = password => {
-  let score = 0;
-  if (password.length > 7) score++;
-  if (/[A-Z]/.test(password)) score++;
-  if (/[0-9]/.test(password)) score++;
-  if (/[^A-Za-z0-9]/.test(password)) score++;
-  return score;
-};
+const GitHubIcon = () => (
+  <img
+    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+    alt="GitHub"
+    width="20"
+    height="20"
+    style={{ marginRight: '10px' }}
+  />
+);
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './AuthForm.css';
+import './AuthForm.custom.css';
+
+
 
 const Signup = ({ onSignup }) => {
-  const [form, setForm] = useState({ email: '', password: '', captcha: '' });
+  const [form, setForm] = useState({ email: '', password: '', confirmPassword: '', captcha: '' });
+  const navigate = useNavigate();
   const [captchaSvg, setCaptchaSvg] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -34,20 +49,28 @@ const Signup = ({ onSignup }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setLoading(true);
     setError('');
     setSuccess('');
+    if (form.password !== form.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    setLoading(true);
+    const { confirmPassword, ...submitForm } = form;
     const res = await fetch('/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(form),
+      body: JSON.stringify(submitForm),
     });
     const data = await res.json();
     setLoading(false);
     if (res.ok) {
       setSuccess(data.message || 'Signup successful! Please log in.');
-      setForm({ email: '', password: '', captcha: '' });
+      setForm({ email: '', password: '', confirmPassword: '', captcha: '' });
+      setTimeout(() => {
+        navigate('/login');
+      }, 1200);
       fetch('/api/captcha').then(res => res.text()).then(setCaptchaSvg);
     } else {
       setError(data.error || 'Signup failed');
@@ -55,8 +78,7 @@ const Signup = ({ onSignup }) => {
     }
   };
 
-  const strength = getStrength(form.password);
-  const strengthColors = ['#d9534f', '#f0ad4e', '#5bc0de', '#28a745'];
+
 
   return (
     <div className="auth-form-container">
@@ -65,16 +87,16 @@ const Signup = ({ onSignup }) => {
       {success && <div className="success">{success}</div>}
       <form onSubmit={handleSubmit} autoComplete="off">
         <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-        <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required />
-        <div className="password-strength-container">
-          <div
-            className="password-strength-bar"
-            style={{
-              width: `${(strength / 4) * 100}%`,
-              backgroundColor: strength > 0 ? strengthColors[strength - 1] : 'transparent',
-            }}
-          />
-        </div>
+        <input name="password" type="password" placeholder="Create a Password" value={form.password} onChange={handleChange} required />
+        <input
+          name="confirmPassword"
+          type="password"
+          placeholder="Re-enter your Password"
+          value={form.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+
         <div className="captcha-container">
           <div className="captcha-img" dangerouslySetInnerHTML={{ __html: captchaSvg }} />
           <button type="button" className="captcha-reload-btn" onClick={fetchCaptcha}>
@@ -90,7 +112,28 @@ const Signup = ({ onSignup }) => {
           required
           className="captcha-input"
         />
-        <button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Sign Up'}</button>
+        <div className="signup-or-oauth">
+          <button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Sign Up'}</button>
+          {/* <div className="or-divider"><span>OR</span></div> */}
+          <div className="oauth-buttons">
+            <button
+              type="button"
+              className="oauth-btn google"
+              onClick={() => window.location.href = '/api/auth/google'}
+            >
+              <GoogleIcon />
+              <span>Sign up with Google</span>
+            </button>
+            <button
+              type="button"
+              className="oauth-btn github"
+              onClick={() => window.location.href = '/api/auth/github'}
+            >
+              <GitHubIcon />
+              <span>Sign up with GitHub</span>
+            </button>
+          </div>
+        </div>
       </form>
       <p>Already have an account? <a href="/login">Login</a></p>
     </div>
