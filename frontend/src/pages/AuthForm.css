@@ -84,7 +84,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0.75rem auto;
+  margin: 0em auto;
+  padding: 0rem 0rem 0.5rem 0.5rem;
   gap: 10px;
 }
 .auth-form-container .captcha-img {
@@ -106,7 +107,7 @@
 }
 .auth-form-container .captcha-input {
   width: 162px;
-  margin: 0 auto 1rem auto;
+  margin: 0 auto 0 auto;
   text-align: center;
 }
 .auth-form-container .password-input {
