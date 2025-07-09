@@ -1,6 +1,6 @@
 # MERN Authentication
 
-A modern authentication web app built with Node.js, Express.js, MongoDB, and React. Supports email/password login, Google & GitHub OAuth, password strength meter, CAPTCHA, and more.
+A modern authentication web app built with Node.js, Express.js, MongoDB, and React. Supports email/password login, Google & GitHub OAuth, CAPTCHA, and more.
 
 ## 📁 Folder Structure
 ```
@@ -59,7 +59,6 @@ A modern authentication web app built with Node.js, Express.js, MongoDB, and Rea
 - Vite + React
 - Email/password login/signup
 - Google & GitHub OAuth buttons
-- Password strength meter
 - Show/hide password toggle
 - Popup messages for errors/success
 - Session-based auth (check session via backend)
