@@ -1,6 +1,6 @@
 # MERN Authentication
 
-This project contains a Node.js/Express/MongoDB backend and a React (Vite) frontend for authentication with email/password and OAuth (Google, GitHub). Both apps run separately.
+A modern authentication web app built with Node.js, Express.js, MongoDB, and React. Supports email/password login, Google & GitHub OAuth, password strength meter, CAPTCHA, and more.
 
 ## 📁 Folder Structure
 ```
