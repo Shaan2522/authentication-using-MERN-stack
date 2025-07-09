@@ -1,3 +1,0 @@
-<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
-
-This workspace contains a fullstack authentication project with a Node.js/Express/MongoDB backend and a React (Vite) frontend. The backend uses session-based authentication, Passport.js for OAuth, bcrypt for password hashing, svg-captcha, and real-time validation. The frontend uses React Router, fetch/AJAX, and a Vite proxy for backend endpoints. All UI/UX should match the original EJS app but implemented in React. Follow the provided folder structure and requirements for both backend and frontend.
