@@ -21,16 +21,29 @@ const GitHubIcon = () => (
   />
 );
 
+const fakeCaptchaSvg = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="40">
+    <rect width="120" height="40" fill="#eee" />
+    <text x="10" y="25" font-size="16" fill="#888">1234</text>
+  </svg>
+`;
+
 const Login = ({ onLogin }) => {
   const [form, setForm] = useState({ email: '', password: '', captcha: '' });
   const [captchaSvg, setCaptchaSvg] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const isProd = import.meta.env.PROD;
+
   const fetchCaptcha = () => {
-    fetch('/api/captcha')
-      .then(res => res.text())
-      .then(setCaptchaSvg);
+    if (isProd) {
+      setCaptchaSvg(fakeCaptchaSvg);
+    } else {
+      fetch('/api/captcha')
+        .then(res => res.text())
+        .then(setCaptchaSvg);
+    }
   };
 
   useEffect(() => {
@@ -45,19 +58,35 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    if (isProd) {
+      // Fake login for GitHub Pages (optional fallback)
+      setTimeout(() => {
+        setLoading(false);
+        if (form.captcha === '1234') {
+          onLogin({ email: form.email });
+        } else {
+          setError('Invalid CAPTCHA');
+          fetchCaptcha();
+        }
+      }, 1000);
+      return;
+    }
+
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify(form),
     });
+
     const data = await res.json();
     setLoading(false);
     if (res.ok) {
       onLogin(data.user);
     } else {
       setError(data.error || 'Login failed');
-      fetch('/api/captcha').then(res => res.text()).then(setCaptchaSvg);
+      fetchCaptcha();
     }
   };
 

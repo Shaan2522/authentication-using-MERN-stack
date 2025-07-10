@@ -107,7 +107,7 @@
 }
 .auth-form-container .captcha-input {
   width: 162px;
-  margin: 0 auto 0 auto;
+  margin: 0 auto 1rem auto;
   text-align: center;
 }
 .auth-form-container .password-input {
