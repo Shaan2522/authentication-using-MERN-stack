@@ -21,13 +21,6 @@ const GitHubIcon = () => (
   />
 );
 
-const fakeCaptchaSvg = `
-  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="40">
-    <rect width="120" height="40" fill="#eee" />
-    <text x="10" y="25" font-size="16" fill="#888">1234</text>
-  </svg>
-`;
-
 const Login = ({ onLogin }) => {
   const [form, setForm] = useState({ email: '', password: '', captcha: '' });
   const [captchaSvg, setCaptchaSvg] = useState('');
@@ -38,7 +31,7 @@ const Login = ({ onLogin }) => {
 
   const fetchCaptcha = () => {
     if (isProd) {
-      setCaptchaSvg(fakeCaptchaSvg);
+      setCaptchaSvg(`<img src="frontend/public/sample-captcha.jpg" alt="captcha" width="120" height="40" />`);
     } else {
       fetch('/api/captcha')
         .then(res => res.text())
@@ -60,7 +53,7 @@ const Login = ({ onLogin }) => {
     setError('');
 
     if (isProd) {
-      // Fake login for GitHub Pages (optional fallback)
+      // Simulated login for GitHub Pages
       setTimeout(() => {
         setLoading(false);
         if (form.captcha === '1234') {

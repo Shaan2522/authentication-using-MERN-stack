@@ -1,3 +1,8 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './AuthForm.css';
+import './AuthForm.custom.css';
+
 const GoogleIcon = () => (
   <img
     src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
@@ -17,12 +22,6 @@ const GitHubIcon = () => (
     style={{ marginRight: '10px' }}
   />
 );
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './AuthForm.css';
-import './AuthForm.custom.css';
-
-
 
 const Signup = ({ onSignup }) => {
   const [form, setForm] = useState({ email: '', password: '', confirmPassword: '', captcha: '' });
@@ -31,12 +30,17 @@ const Signup = ({ onSignup }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+
+  const isProd = import.meta.env.PROD;
 
   const fetchCaptcha = () => {
-    fetch('/api/captcha')
-      .then(res => res.text())
-      .then(setCaptchaSvg);
+    if (isProd) {
+      setCaptchaSvg(`<img src="frontend/public/sample-captcha.jpg" alt="captcha" width="120" height="40" />`);
+    } else {
+      fetch('/api/captcha')
+        .then(res => res.text())
+        .then(setCaptchaSvg);
+    }
   };
 
   useEffect(() => {
@@ -51,11 +55,32 @@ const Signup = ({ onSignup }) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
     if (form.password !== form.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
+
     setLoading(true);
+
+    if (isProd) {
+      // Fake signup simulation for GitHub Pages (for demo)
+      setTimeout(() => {
+        setLoading(false);
+        if (form.captcha === '1234') {
+          setSuccess('Signup successful! Please log in.');
+          setForm({ email: '', password: '', confirmPassword: '', captcha: '' });
+          setTimeout(() => {
+            navigate('/login');
+          }, 1200);
+        } else {
+          setError('Invalid CAPTCHA');
+          fetchCaptcha();
+        }
+      }, 1000);
+      return;
+    }
+
     const { confirmPassword, ...submitForm } = form;
     const res = await fetch('/api/signup', {
       method: 'POST',
@@ -71,14 +96,12 @@ const Signup = ({ onSignup }) => {
       setTimeout(() => {
         navigate('/login');
       }, 1200);
-      fetch('/api/captcha').then(res => res.text()).then(setCaptchaSvg);
+      fetchCaptcha();
     } else {
       setError(data.error || 'Signup failed');
-      fetch('/api/captcha').then(res => res.text()).then(setCaptchaSvg);
+      fetchCaptcha();
     }
   };
-
-
 
   return (
     <div className="auth-form-container">
@@ -96,7 +119,6 @@ const Signup = ({ onSignup }) => {
           onChange={handleChange}
           required
         />
-
         <div className="captcha-container">
           <div className="captcha-img" dangerouslySetInnerHTML={{ __html: captchaSvg }} />
           <button type="button" className="captcha-reload-btn" onClick={fetchCaptcha}>
@@ -114,7 +136,6 @@ const Signup = ({ onSignup }) => {
         />
         <div className="signup-or-oauth">
           <button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Sign Up'}</button>
-          {/* <div className="or-divider"><span>OR</span></div> */}
           <div className="oauth-buttons">
             <button
               type="button"
